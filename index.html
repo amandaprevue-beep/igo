@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirect Page</title>
+</head>
+<body>
+    <script>
+        function getCountry() {
+            fetch('https://ipapi.co/json/')
+                .then(response => response.json())
+                .then(data => {
+                    const country = data.country_code;
+                    const isMobile = /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+                    // Основная логика
+                    if (isMobile && (country === 'SG' || country === 'HK' || country === 'ID' || country === 'IE')) {
+                        // Мобильные из SG, HK, ID, IE → bigo.tv
+                        window.location.href = 'https://www.bigo.tv/show/';
+                    } 
+                    else if (isMobile) {
+                        // Остальные мобильные → dating смартлинк
+                        window.location.href = 'https://wecum.live/J2788X';
+                    } 
+                    else {
+                        // Все десктопы → bigo.tv
+                        window.location.href = 'https://www.bigo.tv/show/';
+                    }
+                })
+                .catch(() => {
+                    // Если API ipapi.co не сработал (блокировка, таймаут и т.д.)
+                    const isMobile = /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+                    
+                    if (isMobile) {
+                        window.location.href = 'https://wecum.live/J2788X';
+                    } else {
+                        window.location.href = 'https://www.bigo.tv/show/';
+                    }
+                });
+        }
+
+        // Запуск при загрузке страницы
+        window.onload = getCountry;
+    </script>
+</body>
+</html>
